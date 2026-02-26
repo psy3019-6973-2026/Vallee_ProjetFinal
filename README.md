@@ -52,6 +52,7 @@ De plus, je suis présentement le cours d'IA avec monsieur Shahab Bakhtiari, don
 ### Tâche 3 : Extension et validation des analyses
 - Tester le code sur les données EO et TASK
 - Pré-traitement des données EO et TASK
+- Essayer de diagnostiquer les performances suspicieusement élevées de l'auteur grâce aux nouvelles données
 
 *Si cette dernière tâche s’avère non réalisable, elle sera remplacée par l’automatisation du projet et par une justification méthodologique de la non-applicabilité du code aux autres données.*
 
