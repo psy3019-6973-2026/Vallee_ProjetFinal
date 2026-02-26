@@ -51,7 +51,7 @@ De plus, je suis présentement le cours d'IA avec monsieur Shahab Bakhtiari, don
 - Tester le code sur les données EO et TASK
 - Pré-traitement des données EO et TASK
 
-*Si cette tâche s’avère non réalisable, elle sera remplacée par l’automatisation du projet et par une justification méthodologique de la non-applicabilité du code aux autres données.*
+*Si cette dernière tâche s’avère non réalisable, elle sera remplacée par l’automatisation du projet et par une justification méthodologique de la non-applicabilité du code aux autres données.*
 
 ## Références
 Chai, W.-X. (2025, 15 juin). brainhack-EEG-depression-ml-dl [Code source]. GitHub. https://github.com/ChaiWeiXuan/brainhack-EEG-depression-ml-dl
