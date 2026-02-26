@@ -36,17 +36,17 @@ De plus, je suis présentement le cours d'IA avec monsieur Shahab Bakhtiari, don
 
 ## Tâches 
 
-### Tâche 1 : Restructuration des données
+### Tâche 1 : Reproductibilité 
+- Reproduction des notebooks existants
+- Documentation du processus de reproduction
+- Correction des bugs s'il y a lieu
+
+
+### Tâche 2 : Restructuration des données
 - Restructurer et simplifier le code
 - Ajouter des explications afin d'améliorer la compréhension du code
 - Traduire les lignes de commentaire écrites en mandarin
 - Ajouter un fichier "environnement.yml" afin de faciliter la reproductibilité du projet
-
-
-### Tâche 2 : Reproductibilité 
-- Reproduction des notebooks existants
-- Documentation du processus de reproduction
-- Correction des bugs s'il y a lieu
 
 
 ### Tâche 3 : Extension et validation des analyses
