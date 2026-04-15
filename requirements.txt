@@ -1,0 +1,12 @@
+mne
+mne-bids
+scikit-learn
+matplotlib
+numpy
+scipy
+seaborn
+tensorflow
+keras
+keras-tuner
+jupyter
+nbconvert
