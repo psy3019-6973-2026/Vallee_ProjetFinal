@@ -1,0 +1,11 @@
+docker_image: brainhack-eeg-depression
+
+code_dir: code
+notebooks_dir: notebooks
+source_data_dir: source_data
+output_data_dir: output_data
+
+files:
+  eeg_dataset:
+    url: https://figshare.com/ndownloader/articles/4244171/versions/2  # EEG data from figshare
+    output_file: source_data/eeg_data.zip
