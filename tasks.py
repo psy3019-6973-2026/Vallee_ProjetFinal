@@ -10,10 +10,61 @@ def setup(c):
     setup_env_python(c, "requirements.txt")
     print("✨ Setup complete!")
 
+@task(
+    help={"name": "Logical name of the file, as defined in the 'files' section of invoke.yaml."}
+)
+def import_file(c, name):
+    """Download a single file from a URL using urllib."""
+    from urllib.request import Request, urlopen
+
+    files = c.config.get("files", {})
+    if name not in files:
+        raise ValueError(f"❌ No file config found for '{name}' in invoke.yaml.")
+
+    entry = files[name]
+    url = entry.get("url")
+    output_file = entry.get("output_file")
+
+    if not url or not output_file:
+        raise ValueError(f"❌ Entry for '{name}' must define both 'url' and 'output_file'.")
+
+    output_path = Path(output_file)
+    tmp_path = output_path.with_suffix(output_path.suffix + ".part")
+
+    if output_path.exists() and output_path.stat().st_size > 0:
+        print(f"🫧 Skipping {name}: {output_file} already exists.")
+        return
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path.unlink(missing_ok=True)
+
+    print(f"📥 Downloading '{name}' from {url}")
+    req = Request(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "*/*"})
+
+    try:
+        with urlopen(req, timeout=60) as response, tmp_path.open("wb") as f:
+            total = 0
+            while True:
+                chunk = response.read(8192)
+                if not chunk:
+                    break
+                f.write(chunk)
+                total += len(chunk)
+
+        if total == 0:
+            tmp_path.unlink(missing_ok=True)
+            raise RuntimeError(f"❌ Downloaded 0 bytes for '{name}'.")
+
+        tmp_path.replace(output_path)
+    except Exception as e:
+        tmp_path.unlink(missing_ok=True)
+        raise RuntimeError(f"❌ Failed to download '{name}': {e}") from e
+
+    print(f"✅ Downloaded {name} to {output_file} ({output_path.stat().st_size} bytes)")
+
 @task
 def fetch(c):
     """Download the EEG dataset from Figshare."""
-    from tasks import import_file 
     import_file(c, "eeg_dataset")
     import zipfile 
     zip_path = Path("source_data/eeg_data.zip")
