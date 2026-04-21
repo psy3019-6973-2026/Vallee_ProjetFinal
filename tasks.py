@@ -95,19 +95,10 @@ def run_svm(c): # only runs notebook 2
                 keys=["source_data_dir", "output_data_dir"],
                 pattern="2_*")  
 
-@task(pre=[run_preprocessing])
-def run_eegnet(c): # only runs notebook 3
-    """Run notebook 3: EEGNet deep learning."""
-    from airoh.utils import run_figures, ensure_dir_exist
-    notebooks_dir = Path(c.config.get("notebooks_dir"))
-    output_dir = Path(c.config.get("output_data_dir")).resolve()
-    run_figures(c, notebooks_dir, output_dir,
-                keys=["source_data_dir", "output_data_dir"],
-                pattern="3_*")  
 
-@task(pre=[run_preprocessing, run_svm, run_eegnet])
+@task(pre=[run_preprocessing, run_svm])
 def run(c):
-    """Run the full pipeline: preprocessing → SVM → EEGNet."""
+    """Run the full pipeline: preprocessing → SVM"""
     print("🎉 Full pipeline complete!")
 
 @task
