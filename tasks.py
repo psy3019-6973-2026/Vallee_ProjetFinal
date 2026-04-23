@@ -115,25 +115,39 @@ def fetch(c):
         print(f"✅ Downloaded '{name}' ({output_path.stat().st_size} bytes)")
 
 @task
-def run_preprocessing(c): # only runs notebook 1
+def run_preprocessing(c):
     """Run notebook 1: EEG preprocessing and bandpower feature extraction."""
-    from airoh.utils import run_figures, ensure_dir_exist
+    import subprocess
     notebooks_dir = Path(c.config.get("notebooks_dir"))
-    output_dir = Path(c.config.get("output_data_dir")).resolve()
-    ensure_dir_exist(c, "output_data_dir")
-    run_figures(c, notebooks_dir, output_dir,
-                keys=["source_data_dir", "output_data_dir"],
-                pattern="1_*")  
+    notebook = notebooks_dir / "1_preprocessing_bandpower.ipynb"
+    env = os.environ.copy()
+    env["SOURCE_DATA_DIR"] = str(Path(c.config.get("source_data_dir")).resolve())
+    env["OUTPUT_DATA_DIR"] = str(Path(c.config.get("output_data_dir")).resolve())
+    Path(c.config.get("output_data_dir")).mkdir(parents=True, exist_ok=True)
+    print(f"▶️ Running {notebook.name}...")
+    subprocess.run(
+        ["jupyter", "nbconvert", "--to", "notebook", "--execute",
+         "--inplace", str(notebook)],
+        env=env, check=True
+    )
+    print(f"✅ {notebook.name} complete!")
 
 @task(pre=[run_preprocessing])
-def run_svm(c): # only runs notebook 2
+def run_svm(c):
     """Run notebook 2: SVM classification."""
-    from airoh.utils import run_figures, ensure_dir_exist
+    import subprocess
     notebooks_dir = Path(c.config.get("notebooks_dir"))
-    output_dir = Path(c.config.get("output_data_dir")).resolve()
-    run_figures(c, notebooks_dir, output_dir,
-                keys=["source_data_dir", "output_data_dir"],
-                pattern="2_*")  
+    notebook = notebooks_dir / "2_ml_svm.ipynb"
+    env = os.environ.copy()
+    env["SOURCE_DATA_DIR"] = str(Path(c.config.get("source_data_dir")).resolve())
+    env["OUTPUT_DATA_DIR"] = str(Path(c.config.get("output_data_dir")).resolve())
+    print(f"▶️ Running {notebook.name}...")
+    subprocess.run(
+        ["jupyter", "nbconvert", "--to", "notebook", "--execute",
+         "--inplace", str(notebook)],
+        env=env, check=True
+    )
+    print(f"✅ {notebook.name} complete!")
 
 
 @task(pre=[run_preprocessing, run_svm])
