@@ -76,9 +76,18 @@ def fetch(c):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"🔍 Fetching file list from {api_url}")
-    response = requests.get(api_url, timeout=30)
-    response.raise_for_status()
-    file_list = response.json()
+    file_list = []
+    page = 1
+    while True:
+        response = requests.get(api_url, params={"page": page, "page_size": 100}, timeout=30)
+        response.raise_for_status()
+        batch = response.json()
+        if not batch:
+            break
+        file_list.extend(batch)
+        print(f"  📄 Page {page}: {len(batch)} fichiers trouvés")
+        page += 1
+    print(f"  ✅ Total: {len(file_list)} fichiers à télécharger")
 
     for file_info in file_list:
         name = file_info["name"]
