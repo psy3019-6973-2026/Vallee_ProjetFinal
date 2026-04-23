@@ -7,5 +7,5 @@ output_data_dir: output_data
 
 files:
   eeg_dataset:
-    url: https://figshare.com/ndownloader/articles/4244171/versions/2  # EEG data from figshare
-    output_file: source_data/eeg_data.zip
+    url: https://api.figshare.com/v2/articles/4244171/files  # Figshare API file list
+    output_dir: source_data/4244171

@@ -62,15 +62,57 @@ def import_file(c, name):
 
 @task
 def fetch(c):
-    """Download the EEG dataset from Figshare."""
-    import_file(c, "eeg_dataset")
-    import zipfile 
-    zip_path = Path("source_data/eeg_data.zip")
-    if zip_path.exists():
-        print("📦 Extracting dataset...")
-        with zipfile.ZipFile(zip_path, "r") as z:
-            z.extractall("source_data/")  # Unzip 
-        print("✅ Extraction complete.")
+    """Download the EEG dataset from Figshare via the API."""
+    import requests
+
+    files = c.config.get("files", {})
+    entry = files.get("eeg_dataset", {})
+    api_url = entry.get("url")
+    output_dir = Path(entry.get("output_dir", "source_data"))
+
+    if not api_url:
+        raise ValueError("❌ No 'url' configured for 'eeg_dataset' in invoke.yaml.")
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    print(f"🔍 Fetching file list from {api_url}")
+    response = requests.get(api_url, timeout=30)
+    response.raise_for_status()
+    file_list = response.json()
+
+    for file_info in file_list:
+        name = file_info["name"]
+        download_url = file_info["download_url"]
+        output_path = output_dir / name
+        tmp_path = output_path.with_suffix(output_path.suffix + ".part")
+
+        if output_path.exists() and output_path.stat().st_size > 0:
+            print(f"🫧 Skipping '{name}': already exists.")
+            continue
+
+        tmp_path.unlink(missing_ok=True)
+        print(f"📥 Downloading '{name}' from {download_url}")
+
+        try:
+            with requests.get(download_url, headers={"User-Agent": "Mozilla/5.0"},
+                              allow_redirects=True, stream=True, timeout=60) as dl_response, \
+                 tmp_path.open("wb") as f:
+                dl_response.raise_for_status()
+                total = 0
+                for chunk in dl_response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+                    total += len(chunk)
+
+            if total == 0:
+                tmp_path.unlink(missing_ok=True)
+                raise RuntimeError(f"❌ Downloaded 0 bytes for '{name}'.")
+
+            tmp_path.replace(output_path)
+        except Exception as e:
+            tmp_path.unlink(missing_ok=True)
+            raise RuntimeError(f"❌ Failed to download '{name}': {e}") from e
+
+        print(f"✅ Downloaded '{name}' ({output_path.stat().st_size} bytes)")
 
 @task
 def run_preprocessing(c): # only runs notebook 1
