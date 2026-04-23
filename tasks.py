@@ -117,6 +117,13 @@ def fetch(c):
                 raise RuntimeError(f"❌ Downloaded 0 bytes for '{name}'.")
 
             tmp_path.replace(output_path)
+
+        except requests.exceptions.HTTPError as e:
+            tmp_path.unlink(missing_ok=True)
+            if e.response is not None and e.response.status_code == 404:
+                print(f"⚠️ Skipping '{name}': file not found (404)")
+                continue
+            raise RuntimeError(f"❌ Failed to download '{name}': {e}") from e
         except Exception as e:
             tmp_path.unlink(missing_ok=True)
             raise RuntimeError(f"❌ Failed to download '{name}': {e}") from e
