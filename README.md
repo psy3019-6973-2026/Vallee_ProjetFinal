@@ -137,7 +137,14 @@ Les notebooks peuvent être exécutés individuellement dans Jupyter, ou automat
 | `invoke run-svm` | Classification par SVM (`2_ml_svm.ipynb`) — exécute aussi le prétraitement |
 | `invoke run` | Pipeline complet : prétraitement → SVM |
 
-> **Note :** Le notebook `3_dl_eegnet.ipynb` (modèle EEGNet) doit être exécuté manuellement dans [Google Colab](https://colab.research.google.com/). Il n'est pas inclus dans le pipeline automatisé, car l'entraînement d'un modèle de deep learning demande des ressources trop importantes.
+*Note :* Le notebook `3_dl_eegnet.ipynb` (modèle EEGNet) doit être exécuté manuellement dans [Google Colab](https://colab.research.google.com/). Il n’est pas inclus dans le pipeline automatisé, car l’entraînement d’un modèle de deep learning demande des ressources trop importantes.
+
+**Pour pouvoir répliquer ce notebook, vous devez :**  
+ 1. Avoir reproduit le pipeline localement avec `invoke fetch` et `invoke run`  
+ 2. Aller sur [Google Drive](drive.google.com) 
+ 3. Créer un dossier `output_data` dans votre Google Drive  
+ 4. Y téléverser les 4 fichiers `.npy` générés dans votre dossier local `output_data/`  
+ 5. Ensuite, vous pourrez exécuter les lignes suivantes
 
 ---
 
