@@ -71,13 +71,13 @@ De plus, je suis présentement le cours d'IA avec monsieur Shahab Bakhtiari, don
 - Restructuration et simplicifation du code, ajout de lignes explicatives et résumé de la pipeline du notebook 2 (1h)
 - Restructuration et simplicifation du code, ajout de lignes explicatives et résumé de la pipeline du notebook 3 (2,75h)
 
-### Tâche 3 (# heures de travail)
+### Tâche 3 (6,25 heures de travail)
 - Prétraitement des deux autres conditions (EO et Task) de la base de données (1,75h)
 - Ajustement notebooks de ML (2 et 3) pour pouvoir traiter les données complètes (avec les nouvelles conditons) (0,25h)
 - Ajustement des lignes explicatives en fonctions des modifications apportées aux notebooks (0,33h)
 - Test du code sur les nouvelles données et débogage (0,8h)
 - Vérification en profondeur des modèles de ML (notebook 2) pour comprendre les performances anormalement hautes et résoudre les problèmes de data leakage (0,53h)
-- Documentation du processus et explications (#h)
+- Documentation du processus et explications (2,59h)
 
 ## Reproduction du projet
 
