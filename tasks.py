@@ -14,8 +14,8 @@ def setup(c):
     help={"name": "Logical name of the file, as defined in the 'files' section of invoke.yaml."}
 )
 def import_file(c, name):
-    """Download a single file from a URL using urllib."""
-    from urllib.request import Request, urlopen
+    """Download a single file from a URL using requests."""
+    import requests
 
     files = c.config.get("files", {})
     if name not in files:
@@ -39,15 +39,13 @@ def import_file(c, name):
     tmp_path.unlink(missing_ok=True)
 
     print(f"📥 Downloading '{name}' from {url}")
-    req = Request(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "*/*"})
 
     try:
-        with urlopen(req, timeout=60) as response, tmp_path.open("wb") as f:
+        with requests.get(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "*/*"},
+                          allow_redirects=True, stream=True, timeout=60) as response, \
+             tmp_path.open("wb") as f:
             total = 0
-            while True:
-                chunk = response.read(8192)
-                if not chunk:
-                    break
+            for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
                 total += len(chunk)
 
